@@ -1,0 +1,48 @@
+<div class='board' ng-controller='listsCtrl as listsCtrl'>
+	<div class="lists">
+		<div class="list-wrap" ng-repeat='list in listsCtrl.getLists' ng-controller='listCtrl as listCtrl'>
+			<div class="list">
+				<div class="list__remove" ng-click='listCtrl.removeList(list)'><i class='glyphicon glyphicon-remove'></i></div>
+				<h3 class="list__title">{{list.name}}</h3>
+				<div class="cards">
+					<div class="card" ng-repeat='card in listCtrl.getCards(list)' ng-controller='cardCtrl as cardCtrl'>
+						
+						<div class="card__name">{{card.name}}</div>
+						<div class="card__description" ng-if='!cardCtrl.statusEdit' >{{card.description}}</div>
+						<form ng-submit='cardCtrl.updateCard()' 
+									ng-if='cardCtrl.statusEdit'
+									close-edit
+									status-edit='cardCtrl.statusEdit'>
+							<div class="edit-bottom">
+								<div class="wrap-control">
+									<label for="">Описание</label>
+									<input type="text" class='inp-edit' ng-model='cardCtrl.copyCard.description'>
+								</div>
+								<div class="wrap-control">
+									<label for="">Лист</label>
+									<select ng-model='cardCtrl.copyCard.list_id'
+											ng-options='list.id as list.name for list in listsCtrl.getLists'
+											ng-change='cardCtrl.updateCard()'
+											class='select-edit'
+									></select>
+								</div>
+							</div>
+						</form>
+						<div class="card__edit" ng-click='cardCtrl.editCard(card)'><i class='glyphicon glyphicon-pencil'></i></div>
+						<div class="card__remove" ng-click='cardCtrl.removeCard(card)'><i class='glyphicon glyphicon-remove'></i></div>
+					</div>
+				</div>
+				<div class="add-new-card">Добавить карту</div>
+				<form ng-submit='listCtrl.addCard(list)'>
+					<input type="text" ng-model='listCtrl.cardName' class='inp-new-card'>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="add-list">
+		<div class="add-list__title">Новый лист</div>
+		<form ng-submit='listsCtrl.addList()'>
+			<input type="text" ng-model='listsCtrl.name' class='add-list__inp'>
+		</form>
+	</div>
+</div>
